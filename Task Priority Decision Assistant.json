@@ -1,0 +1,110 @@
+{
+  "name": "Task Priority Decision Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here are the tasks to prioritize:\n\n{{ $json[\"Your Tasks\"] }}",
+        "options": {
+          "systemMessage": "You are a helpful task prioritization assistant.\n\nYour task is to analyze a list of tasks provided by the user and prioritize them based on difficulty and time available.\n\nFor each task, consider:\n- Task difficulty (Low/Medium/High)\n- Time available\n- Urgency based on the Eisenhower Matrix principles\n- Energy levels required\n\nProvide a prioritized list with:\n1. The recommended order (highest priority first)\n2. Brief reasoning for each task's priority\n3. Suggestions for which tasks to do now vs postpone\n4. Time management tips\n\nFormat your response clearly with numbered priorities and explanations."
+        }
+      },
+      "id": "1c68b63c-8b9b-4795-aa67-6fa1ab50f08b",
+      "name": "AI Decision Maker",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        720,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "id": "65c6a7ea-c7e9-42c4-a9c6-e54d4dd95179",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        792,
+        752
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MonJnPV4gx4kVydu",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Task Priority Assistant - List Your Tasks",
+        "formDescription": "List all your tasks with their details. The AI will analyze and prioritize them for you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your Tasks",
+              "fieldType": "textarea",
+              "placeholder": "Enter each task on a new line with format:\nTask Name | Difficulty (Low/Medium/High) | Time Available\n\nExample:\nWrite report | High | 3 hours\nReply to emails | Low | 30 minutes\nTeam meeting prep | Medium | 1 hour",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Get Recommendation"
+        }
+      },
+      "id": "d7c6aceb-75bf-4982-942c-ff7b491c516a",
+      "name": "Task Input Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        528
+      ],
+      "webhookId": "eaa54218-e00c-488a-80e1-066bbd536263"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Decision Maker",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Task Input Form": {
+      "main": [
+        [
+          {
+            "node": "AI Decision Maker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e6d72ede-034f-410c-b578-6b3233613553",
+  "meta": {
+    "instanceId": "4f17be132fd877bb44c65e4e4bc2a716e09640bb677721f56e597c793e526745"
+  },
+  "id": "73Z4C2KhB2YOib63",
+  "tags": []
+}
